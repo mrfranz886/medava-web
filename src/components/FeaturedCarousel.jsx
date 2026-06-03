@@ -33,7 +33,7 @@ export default function FeaturedCarousel() {
             </p>
           </div>
           <button className="hidden md:flex items-center gap-2 text-brand-green font-semibold hover:gap-3 transition-all">
-            View All <ChevronRight className="w-5 h-5" />
+            Vedi Tutti <ChevronRight className="w-5 h-5" />
           </button>
         </div>
 

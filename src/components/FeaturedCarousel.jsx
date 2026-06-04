@@ -83,7 +83,7 @@ export default function FeaturedCarousel() {
             {[...medavaProEquipment, ...medavaProEquipment].map((item, index) => (
               <div
                 key={`${item.id}-${index}`}
-                className="relative flex-shrink-0 w-[380px] rounded-3xl overflow-hidden bg-white border border-gray-100 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                className="relative flex-shrink-0 w-[350px] rounded-3xl overflow-hidden bg-white border border-gray-100 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
                 onClick={() => navigate(`/listing/${item.id}`)}
               >
                 {/* Image */}

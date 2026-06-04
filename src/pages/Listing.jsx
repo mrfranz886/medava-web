@@ -181,7 +181,7 @@ export default function Listing() {
       </div>
 
       <main className="max-w-7xl mx-auto px-4 md:px-6 py-10">
-        <div className="text-left">
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1.9fr_1fr] items-start">
           <button
             onClick={() => navigate(-1)}
             className="inline-flex items-center gap-2 text-sm font-semibold text-brand-green hover:text-brand-green/80"
@@ -344,69 +344,77 @@ export default function Listing() {
             </div>
           </section>
 
-          <aside className="space-y-6">
-            <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-soft">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-sm text-gray-500">A partire da</p>
-                  <p className="text-3xl font-bold text-gray-900">€{pricePerDay}</p>
-                  <p className="text-sm text-gray-500">al giorno</p>
+          <aside className="hidden lg:block self-start lg:sticky lg:top-32">
+            <div className="sticky top-28 space-y-6">
+              
+              <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-soft">
+                
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">A partire da</p>
+                    <p className="text-3xl font-bold text-gray-900">€{pricePerDay}</p>
+                    <p className="text-sm text-gray-500">al giorno</p>
+                  </div>
+
+                  <div className="rounded-full bg-brand-green/10 px-3 py-2 text-sm font-semibold text-brand-green">
+                    ★ {item.rating}
+                  </div>
                 </div>
-                <div className="rounded-full bg-brand-green/10 px-3 py-2 text-sm font-semibold text-brand-green">
-                  ★ {item.rating}
+
+                <button
+                  onClick={() => setCalendarOpen((open) => !open)}
+                  className="mt-6 w-full rounded-3xl border border-gray-200 bg-white px-4 py-4 text-left text-sm font-semibold text-gray-900 hover:border-brand-green"
+                >
+                  <div className="text-xs uppercase tracking-[0.2em] text-gray-500">
+                    Scegli date
+                  </div>
+                  <div className="mt-2 flex items-center justify-between gap-4">
+                    <span>{selectedRange?.from ? formatDate(selectedRange.from) : "Data inizio"}</span>
+                    <span>{selectedRange?.to ? formatDate(selectedRange.to) : "Data fine"}</span>
+                  </div>
+                </button>
+
+                {calendarOpen && (
+                  <div className="mt-5 rounded-3xl border border-gray-200 bg-slate-50 p-4">
+                    <DayPicker
+                      mode="range"
+                      numberOfMonths={2}
+                      selected={selectedRange}
+                      onSelect={handleRangeSelect}
+                      disabled={unavailableDates}
+                    />
+                  </div>
+                )}
+
+                <div className="mt-6 rounded-3xl border border-gray-200 bg-slate-50 p-4">
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Giorni</span>
+                    <span>{selectedDays || minimumRentalDays} giorni</span>
+                  </div>
+
+                  <div className="mt-3 flex justify-between text-sm text-gray-600">
+                    <span>Commissione Medava</span>
+                    <span>
+                      {bookingCommission > 0
+                        ? `€${formatEUR(bookingCommission)} (${Math.round(commissionRate * 100)}%)`
+                        : `${Math.round(commissionRate * 100)}%`}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 flex justify-between text-xl font-semibold text-gray-900">
+                    <span>Totale</span>
+                    <span>€{formatEUR(bookingTotal || pricePerDay)}</span>
+                  </div>
                 </div>
+
+                <button
+                  onClick={() => alert("Richiesta di prenotazione inviata (mock).")}
+                  className="mt-5 w-full rounded-3xl bg-brand-green px-5 py-4 text-sm font-semibold text-white hover:bg-brand-green/90"
+                >
+                  Richiedi prenotazione
+                </button>
+
               </div>
-
-              <button
-                onClick={() => setCalendarOpen((open) => !open)}
-                className="mt-6 w-full rounded-3xl border border-gray-200 bg-white px-4 py-4 text-left text-sm font-semibold text-gray-900 hover:border-brand-green"
-              >
-                <div className="text-xs uppercase tracking-[0.2em] text-gray-500">Scegli date</div>
-                <div className="mt-2 flex items-center justify-between gap-4">
-                  <span>{selectedRange?.from ? formatDate(selectedRange.from) : "Data inizio"}</span>
-                  <span>{selectedRange?.to ? formatDate(selectedRange.to) : "Data fine"}</span>
-                </div>
-              </button>
-
-              {calendarOpen && (
-                <div className="mt-5 rounded-3xl border border-gray-200 bg-slate-50 p-4">
-                  <DayPicker
-                    mode="range"
-                    numberOfMonths={2}
-                    selected={selectedRange}
-                    onSelect={handleRangeSelect}
-                    disabled={unavailableDates}
-                  />
-                </div>
-              )}
-
-              <div className="mt-6 rounded-3xl border border-gray-200 bg-slate-50 p-4">
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Giorni</span>
-                  <span>{selectedDays || minimumRentalDays} giorni</span>
-                </div>
-                <div className="mt-3 flex justify-between text-sm text-gray-600">
-                  <span>Commissione Medava</span>
-                  <span>
-                    {bookingCommission > 0
-                      ? `€${formatEUR(bookingCommission)} (${Math.round(commissionRate * 100)}%)`
-                      : `${Math.round(commissionRate * 100)}%`}
-                  </span>
-                </div>
-                <div className="mt-4 flex justify-between text-xl font-semibold text-gray-900">
-                  <span>Totale</span>
-                  <span>
-                    €{formatEUR(bookingTotal || pricePerDay)}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                onClick={() => alert("Richiesta di prenotazione inviata (mock).")}
-                className="mt-5 w-full rounded-3xl bg-brand-green px-5 py-4 text-sm font-semibold text-white hover:bg-brand-green/90"
-              >
-                Richiedi prenotazione
-              </button>
             </div>
           </aside>
         </div>
@@ -414,6 +422,3 @@ export default function Listing() {
     </div>
   );
 }
-
-
-

@@ -5,52 +5,102 @@ import us1 from "../assets/listings/ultrasound-1.jpg";
 import us2 from "../assets/listings/ultrasound-2.jpg";
 import us3 from "../assets/listings/ultrasound-3.jpg";
 import us4 from "../assets/listings/ultrasound-4.jpg";
+import mo1 from "../assets/listings/Morpheus/Morpheus-8.png";
+import mo2 from "../assets/listings/Morpheus/Morpheus-8_2.jpg";
+import mo3 from "../assets/listings/Morpheus/Morpheus8_3.avif";
+import mo4 from "../assets/listings/Morpheus/Morpheus-8_4.jpg";
 
 const mockEquipment = [
   {
     id: 1,
-    title: "Philips Affiniti 70 Ultrasound",
-    category: "Ultrasound",
+    title: "inmode Morpheus8",
+    category: "Skin",
     city: "Napoli",
     rating: 4.8,
     reviews: 24,
-    pricePerDay: 120,
-    images: [us1, us2, us3],
-    distance: "2.3 km from center",
+    pricePerDay: 500,
+    images: [mo1, mo2, mo3, mo4],
+    distance: "2.3 km da te",
     verified: true,
     medavaPro: true,
-    description: "Professional portable ultrasound system, perfect for clinics.",
-    maintenance: "Certified, maintained monthly",
+    description: "Morpheus8 è una piattaforma minimamente invasiva Modulare a RF frazionata per il rimodellamento dell’adipe sottocutaneo del viso e del corpo.",
+    features: [
+      "Tecnologia Combinata: Sfrutta il danno controllato dei microaghi per il microneedling, unito all'energia termica della radiofrequenza, che riscalda gli strati più profondi (sottocutanei)",
+      "Profondità Programmabile: I manipoli possono raggiungere profondità precise e variabili da 2 mm a 8 mm, rendendolo adatto sia per il viso che per il corpo",
+      "Rimodellamento Adiposo: Oltre al rassodamento cutaneo, agisce come SARD (Rimodellamento Adiposo Sottocutaneo), riducendo il grasso localizzato nelle aree più piccole (es. doppio mento)",
+      "Aree Trattabili: Viso, collo, décolleté, braccia, addome, glutei e interno cosce",
+      "Indicazioni: Tratta rughe profonde, lassità cutanea, cicatrici da acne, smagliature e irregolarità della texture"
+    ],
+    included: [
+      "Manipolo sterile e monouso: Testina dotata di micro-aghi (variabili a seconda della zona)",
+      "Case di trasporto",
+      "Manuale d'uso"
+    ],
+    certifications: [
+      "Marchio CE",
+      "Libretto manutenzione"
+    ]
   },
+  
   {
     id: 2,
-    title: "GE Signa 1.5T MRI System",
-    category: "MRI",
-    city: "Naples",
-    rating: 4.9,
-    reviews: 18,
-    pricePerDay: 450,
-    images: [us4, us2],
-    distance: "1.8 km from center",
+    title: "inmode Morpheus8",
+    category: "Skin",
+    city: "Napoli",
+    rating: 4.8,
+    reviews: 24,
+    pricePerDay: 500,
+    images: [mo1, mo2, mo3, mo4],
+    distance: "2.3 km da te",
     verified: true,
-    medavaPro: true,
-    description: "Advanced MRI system with latest software updates.",
-    maintenance: "Certified, daily inspection",
+    medavaPro: false,
+    description: "Morpheus8 è una piattaforma minimamente invasiva Modulare a RF frazionata per il rimodellamento dell’adipe sottocutaneo del viso e del corpo.",
+    features: [
+      "Tecnologia Combinata: Sfrutta il danno controllato dei microaghi per il microneedling, unito all'energia termica della radiofrequenza, che riscalda gli strati più profondi (sottocutanei)",
+      "Profondità Programmabile: I manipoli possono raggiungere profondità precise e variabili da 2 mm a 8 mm, rendendolo adatto sia per il viso che per il corpo",
+      "Rimodellamento Adiposo: Oltre al rassodamento cutaneo, agisce come SARD (Rimodellamento Adiposo Sottocutaneo), riducendo il grasso localizzato nelle aree più piccole (es. doppio mento)",
+      "Aree Trattabili: Viso, collo, décolleté, braccia, addome, glutei e interno cosce",
+      "Indicazioni: Tratta rughe profonde, lassità cutanea, cicatrici da acne, smagliature e irregolarità della texture"
+    ],
+    included: [
+      "Manipolo sterile e monouso: Testina dotata di micro-aghi (variabili a seconda della zona)",
+      "Case di trasporto",
+      "Manuale d'uso"
+    ],
+    certifications: [
+      "Marchio CE",
+      "Libretto manutenzione"
+    ]
   },
   {
     id: 3,
-    title: "Siemens ECG Monitoring Station",
-    category: "Cardiology",
-    city: "Naples",
-    rating: 4.7,
-    reviews: 31,
-    pricePerDay: 80,
-    images: [ecg1, ecg2],
-    distance: "3.1 km from center",
+    title: "inmode Morpheus8",
+    category: "Skin",
+    city: "Napoli",
+    rating: 4.8,
+    reviews: 24,
+    pricePerDay: 500,
+    images: [mo1, mo2, mo3, mo4],
+    distance: "2.3 km da te",
     verified: true,
-    medavaPro: false,
-    description: "12-lead ECG system with wireless connectivity.",
-    maintenance: "Certified, calibrated regularly",
+    medavaPro: true,
+    description: "Morpheus8 è una piattaforma minimamente invasiva Modulare a RF frazionata per il rimodellamento dell’adipe sottocutaneo del viso e del corpo.",
+    features: [
+      "Tecnologia Combinata: Sfrutta il danno controllato dei microaghi per il microneedling, unito all'energia termica della radiofrequenza, che riscalda gli strati più profondi (sottocutanei)",
+      "Profondità Programmabile: I manipoli possono raggiungere profondità precise e variabili da 2 mm a 8 mm, rendendolo adatto sia per il viso che per il corpo",
+      "Rimodellamento Adiposo: Oltre al rassodamento cutaneo, agisce come SARD (Rimodellamento Adiposo Sottocutaneo), riducendo il grasso localizzato nelle aree più piccole (es. doppio mento)",
+      "Aree Trattabili: Viso, collo, décolleté, braccia, addome, glutei e interno cosce",
+      "Indicazioni: Tratta rughe profonde, lassità cutanea, cicatrici da acne, smagliature e irregolarità della texture"
+    ],
+    included: [
+      "Manipolo sterile e monouso: Testina dotata di micro-aghi (variabili a seconda della zona)",
+      "Case di trasporto",
+      "Manuale d'uso"
+    ],
+    certifications: [
+      "Marchio CE",
+      "Libretto manutenzione"
+    ]
   },
   {
     id: 4,

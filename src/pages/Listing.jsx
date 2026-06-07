@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import CategoryBar from "../components/CategoryBar";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import logo from "../assets/medava_logo.svg";
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -24,7 +25,6 @@ export default function Listing() {
   const categories = ["All", ...new Set(mockEquipment.map((item) => item.category))];
 
   const [activeImage, setActiveImage] = useState(0);
-  const [hovered, setHovered] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(true);
   const [selectedRange, setSelectedRange] = useState();
@@ -71,16 +71,6 @@ export default function Listing() {
     setBookingTotal(total);
   }, [selectedRange, selectedDays, pricePerDay]);
 
-  useEffect(() => {
-    if (hovered) return;
-
-    const interval = setInterval(() => {
-      setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [hovered, images.length]);
-
   const handleRangeSelect = (range) => {
     setSelectedRange(range);
     if (!range?.from || !range?.to) return;
@@ -112,6 +102,10 @@ export default function Listing() {
       : "/#listing-anchor";
     navigate(path);
   };
+
+  const equipment = mockEquipment.find(
+  (item) => item.id === Number(id)
+  );
 
   useEffect(() => {
     if (!categoriesOpen) return;
@@ -181,7 +175,7 @@ export default function Listing() {
       </div>
 
       <main className="max-w-7xl mx-auto px-4 md:px-6 py-10">
-        <div className="mt-8 grid gap-8 lg:grid-cols-[1.9fr_1fr] items-start">
+        <div className="mt-2 grid gap-8 lg:grid-cols-[1.9fr_1fr] items-start">
           <button
             onClick={() => navigate(-1)}
             className="inline-flex items-center gap-2 text-sm font-semibold text-brand-green hover:text-brand-green/80"
@@ -192,51 +186,78 @@ export default function Listing() {
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.9fr_1fr]">
           <section className="space-y-6">
-            <div className="rounded-[28px] overflow-hidden bg-white shadow-soft">
               <div
                 id="photos"
-                className="relative"
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
+                className="relative rounded-[28px] overflow-hidden bg-white shadow-soft"
               >
-                <img
-                  src={images[activeImage]}
-                  alt={item.title}
-                  className="w-full h-[460px] object-cover transition-transform duration-300 hover:scale-105 cursor-pointer"
-                  onClick={() => setLightboxOpen(true)}
-                />
-                <button
-                  className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-3 text-2xl text-gray-900 shadow-soft hover:bg-white"
-                  onClick={() => setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1))}
-                >
-                  ‹
-                </button>
-                <button
-                  className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-3 text-2xl text-gray-900 shadow-soft hover:bg-white"
-                  onClick={() => setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1))}
-                >
-                  ›
-                </button>
-              </div>
-
-              <div className="flex flex-wrap gap-3 p-4 bg-slate-50">
-                {images.map((src, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveImage(index)}
-                    className={`overflow-hidden rounded-3xl border ${
-                      index === activeImage ? "border-brand-green" : "border-transparent"
-                    } shadow-sm`}
-                  >
+                {images.length === 1 ? (
+                  <div className="h-[520px] bg-white flex items-center justify-center rounded-[28px] overflow-hidden">
                     <img
-                      src={src}
-                      alt={`${item.title} thumbnail ${index + 1}`}
-                      className="h-20 w-32 object-cover"
+                      src={images[0]}
+                      alt={item.title}
+                      className="max-h-full max-w-full object-contain p-4"
+                      onClick={() => {
+                        setActiveImage(0);
+                        setLightboxOpen(true);
+                      }}
                     />
-                  </button>
-                ))}
+                  </div>
+                ) : images.length === 2 ? (
+                  <div className="grid grid-cols-2 gap-2 p-2 h-[520px]">
+                    {images.map((src, i) => (
+                      <img
+                        key={i}
+                        src={src}
+                        className="w-full h-full object-cover rounded-3xl cursor-pointer"
+                        onClick={() => {
+                          setActiveImage(i);
+                          setLightboxOpen(true);
+                        }}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-4 grid-rows-2 gap-2 p-2 h-[520px]">
+                    {/* Main Image */}
+                    <div className="col-span-2 row-span-2 overflow-hidden rounded-3xl">
+                      <img
+                        src={images[0]}
+                        alt={item.title}
+                        className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition hover:scale-[1.02] transition"
+                        onClick={() => {
+                          setActiveImage(0);
+                          setLightboxOpen(true);
+                        }}
+                      />
+                    </div>
+
+                    {/* Secondary Images */}
+                    {images.slice(1, 5).map((src, index) => (
+                      <div key={index} className="overflow-hidden rounded-3xl">
+                        <img
+                          src={src}
+                          alt={`${item.title} ${index + 2}`}
+                          className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition hover:scale-[1.02] transition"
+                          onClick={() => {
+                            setActiveImage(index + 1);
+                            setLightboxOpen(true);
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+               {/* Open Gallery Button */}
+                <button
+                 onClick={() => {
+                   setActiveImage(0);
+                   setLightboxOpen(true);
+                 }}
+                 className="absolute bottom-6 right-6 rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-gray-900 shadow-lg border border-gray-200 hover:bg-gray-50"
+                >
+                 📷 Mostra tutte le foto
+                </button>
               </div>
-            </div>
 
             {/* Lightbox Modal */}
             {lightboxOpen && (
@@ -283,12 +304,27 @@ export default function Listing() {
               <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                 <div className="space-y-3">
                   <h1 className="text-4xl font-bold text-gray-900">{item.title}</h1>
-                  <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
-                    <span>★ {item.rating} · {item.reviews} recensioni</span>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-sm text-gray-500">
+                      ★ {item.rating} · {item.reviews} recensioni
+                    </span>
+
                     {item.medavaPro && (
-                      <span className="rounded-full bg-brand-green/10 px-3 py-1 text-brand-green font-semibold">Medava Pro</span>
+                      <div className="inline-flex items-center gap-2 bg-brand-green text-white px-3 py-1.5 rounded-full border border-white/20 shadow-lg">
+                        <img
+                          src={logo}
+                          alt="Medava logo"
+                          className="w-3.5 h-3.5 brightness-0 invert"
+                        />
+                        <span className="text-[11px] font-semibold tracking-wider">
+                          MEDAVA PRO
+                        </span>
+                      </div>
                     )}
-                    <span>{item.city}</span>
+
+                    <span className="text-sm text-gray-500">
+                      {item.city}
+                    </span>
                   </div>
                 </div>
                 <div className="rounded-full border border-brand-green/20 bg-brand-green/10 px-4 py-2 text-sm font-semibold text-brand-green">
@@ -298,18 +334,53 @@ export default function Listing() {
 
               <p className="mt-6 text-gray-700 leading-relaxed">{item.description}</p>
 
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                {[
-                  "Convex probe included",
-                  "Linear probe included",
-                  "Wi-Fi DICOM",
-                  "Technical support",
-                  "Clean certified device",
-                  "Maintenance log",
-                ].map((feature) => (
-                  <div key={feature} className="flex items-start gap-3 rounded-3xl border border-gray-200 bg-slate-50 p-4">
+              {/* Features */}
+              <h2 className="mt-8 text-xl font-semibold text-gray-900">
+                Caratteristiche
+              </h2>
+
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {item.features?.map((feature) => (
+                  <div
+                    key={feature}
+                    className="flex items-start gap-3 rounded-3xl border border-gray-200 bg-slate-50 p-4"
+                  >
                     <span className="text-brand-green">✓</span>
                     <span className="text-sm text-gray-700">{feature}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Included */}
+              <h2 className="mt-8 text-xl font-semibold text-gray-900">
+                Cos'è incluso
+              </h2>
+
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {item.included?.map((included) => (
+                  <div
+                    key={included}
+                    className="flex items-start gap-3 rounded-3xl border border-gray-200 bg-slate-50 p-4"
+                  >
+                    <span className="text-brand-green">✓</span>
+                    <span className="text-sm text-gray-700">{included}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Certifications */}
+              <h2 className="mt-8 text-xl font-semibold text-gray-900">
+                Certificazioni
+              </h2>
+
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {item.certifications?.map((certification) => (
+                  <div
+                    key={certification}
+                    className="flex items-start gap-3 rounded-3xl border border-gray-200 bg-slate-50 p-4"
+                  >
+                    <span className="text-brand-green">✓</span>
+                    <span className="text-sm text-gray-700">{certification}</span>
                   </div>
                 ))}
               </div>

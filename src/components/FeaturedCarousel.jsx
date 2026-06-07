@@ -12,6 +12,11 @@ export default function FeaturedCarousel() {
   const scroll = (direction) => {
     const container = scrollRef.current;
     const scrollAmount = 320;
+    if (!container) return;
+
+    // Pause auto-scrolling while user-triggered scroll happens
+    pauseAutoScrollTemporarily(1200);
+
     if (direction === "left") {
       container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
     } else {
@@ -20,6 +25,21 @@ export default function FeaturedCarousel() {
   };
 
   const isPaused = useRef(false);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartScroll = useRef(0);
+  const resumeTimeout = useRef(null);
+  const movedDuringDrag = useRef(false);
+  const pointerDownTargetId = useRef(null);
+
+  const pauseAutoScrollTemporarily = (ms = 1000) => {
+    isPaused.current = true;
+    if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
+    resumeTimeout.current = setTimeout(() => {
+      isPaused.current = false;
+      resumeTimeout.current = null;
+    }, ms);
+  };
 
   useEffect(() => {
   const container = scrollRef.current;
@@ -47,6 +67,7 @@ export default function FeaturedCarousel() {
 
   return () => {
     cancelAnimationFrame(animationFrame);
+    if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
   };
 }, []);
   
@@ -73,18 +94,66 @@ export default function FeaturedCarousel() {
           <div
           ref={scrollRef}
           className="flex gap-4 overflow-x-auto scrollbar-hide pb-4"
+          style={{ touchAction: "pan-y" }}
           onMouseEnter={() => {
             isPaused.current = true;
           }}
           onMouseLeave={() => {
             isPaused.current = false;
           }}
+          onPointerDown={(e) => {
+            const container = scrollRef.current;
+            if (!container) return;
+            isDragging.current = true;
+            dragStartX.current = e.clientX;
+            dragStartScroll.current = container.scrollLeft;
+            movedDuringDrag.current = false;
+            pointerDownTargetId.current = e.target.closest?.("[data-listing-id]")?.dataset?.listingId ?? null;
+            container.setPointerCapture?.(e.pointerId);
+            pauseAutoScrollTemporarily(2000);
+          }}
+          onPointerMove={(e) => {
+            const container = scrollRef.current;
+            if (!container || !isDragging.current) return;
+            const dx = e.clientX - dragStartX.current;
+            if (Math.abs(dx) > 6) movedDuringDrag.current = true;
+            container.scrollLeft = dragStartScroll.current - dx;
+          }}
+          onPointerUp={(e) => {
+            const container = scrollRef.current;
+            if (!container) return;
+            // If pointer did not move significantly, treat as a click/tap
+            const targetId = pointerDownTargetId.current;
+            if (!movedDuringDrag.current && targetId) {
+              navigate(`/listing/${targetId}`);
+            }
+
+            isDragging.current = false;
+            pointerDownTargetId.current = null;
+            container.releasePointerCapture?.(e.pointerId);
+            pauseAutoScrollTemporarily(1200);
+          }}
+          onPointerCancel={(e) => {
+            const container = scrollRef.current;
+            if (!container) return;
+            isDragging.current = false;
+            container.releasePointerCapture?.(e.pointerId);
+            pauseAutoScrollTemporarily(1200);
+          }}
+          onPointerLeave={(e) => {
+            // If pointer leaves while dragging, end drag
+            if (!isDragging.current) return;
+            const container = scrollRef.current;
+            isDragging.current = false;
+            container?.releasePointerCapture?.(e.pointerId);
+            pauseAutoScrollTemporarily(1200);
+          }}
         >
             {[...medavaProEquipment, ...medavaProEquipment].map((item, index) => (
               <div
                 key={`${item.id}-${index}`}
+                data-listing-id={item.id}
                 className="relative flex-shrink-0 w-[355px] rounded-3xl overflow-hidden bg-white border border-gray-100 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-                onClick={() => navigate(`/listing/${item.id}`)}
               >
                 {/* Image */}
               <div className="relative h-80 overflow-hidden bg-gray-200">
@@ -97,10 +166,10 @@ export default function FeaturedCarousel() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
                 {/* MEDAVA PRO badge */}
-                <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/80 backdrop-blur-md text-white px-4 py-2 rounded-full">
-                  <img src={logo} className="w-4 h-4" />
+                <div className="absolute top-4 left-4 flex items-center gap-2 bg-brand-green text-white px-4 py-2 rounded-full border border-white/20 shadow-lg">
+                  <img src={logo} className="w-4 h-4 brightness-0 invert" />
                   <span className="text-xs font-semibold tracking-wide">
-                    MEDAVA PRO
+                    medava PRO
                   </span>
                 </div>
 

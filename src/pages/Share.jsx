@@ -6,6 +6,7 @@ import HeroSection from "../components/HeroSection";
 import FeaturedCarousel from "../components/FeaturedCarousel";
 import ListingsGrid from "../components/ListingsGrid";
 import mockEquipment from "../data/mockEquipment";
+import PreviewBanner from "../components/PreviewBanner";
 
 export default function Home() {
   const [searchParams] = useSearchParams();
@@ -66,6 +67,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
+      <PreviewBanner />
+      
       <Navbar
         searchValue={searchInput}
         onSearchValueChange={setSearchInput}

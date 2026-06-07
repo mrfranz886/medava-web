@@ -5,7 +5,7 @@ export default function HeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left Content */}
           <div className="space-y-6 lg:space-y-8">
-            <div className="space-y-4">
+            <div className="space-y-4 text-center flex flex-col items-center">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                 Il Marketplace B2B dei{" "}
                 <span className="text-brand-green">Dispositivi Medici</span>
@@ -14,14 +14,17 @@ export default function HeroSection() {
                 Noleggia dispositivi professionali da medici e cliniche.
               </p>  
               <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-lg">  
-                Nessun leasing. Nessun contratto a lungo termine.
+                Nessun leasing.
+              </p>
+              <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-lg">  
+                Nessun contratto a lungo termine.
               </p>
             </div>
 
             {/* Feature Badges */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
               {[
-                { icon: "🏥", text: "100+ Dispositivi" },
+                { icon: "🏥", text: "Dispositivi Certificati" },
                 { icon: "✅", text: "Professionisti Verificati" },
                 { icon: "⚡", text: "Prenotazioni rapide" },
                 { icon: "🛡️", text: "Protezione Medava" },

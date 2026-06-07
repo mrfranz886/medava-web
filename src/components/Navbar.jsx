@@ -16,10 +16,10 @@ export default function Navbar({ searchValue = "", onSearchValueChange, onSearch
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-18">
           {/* Left Section - Logo */}
-          <Link to="/" className="flex items-center gap-3 no-underline">
-            <img src={logo} alt="Medava logo" className="w-10 h-10" />
+          <Link to="/" className="flex items-center gap-2 no-underline">
+            <img src={logo} alt="Medava logo" className="w-11 h-11" />
             <div className="flex items-center gap-2">
-              <span className="text-xl font-bold tracking-tight text-gray-900 lowercase">medava</span>
+              <span className="text-2xl font-bold tracking-tight text-gray-900 lowercase">medava</span>
               <span className="px-2 py-1 text-[0.65rem] font-semibold tracking-[0.24em] uppercase text-brand-green bg-brand-green/10 rounded-full">
                 share
               </span>

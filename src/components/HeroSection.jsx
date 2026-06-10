@@ -1,8 +1,11 @@
+import MedavaHeroLogo from "../components/MedavaHeroLogo";
+
 export default function HeroSection() {
   return (
     <div className="bg-gradient-to-br from-brand-light via-white to-white py-16 md:py-24 lg:py-28">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
           {/* Left Content */}
           <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4 text-center flex flex-col items-center">
@@ -10,13 +13,16 @@ export default function HeroSection() {
                 Il Marketplace B2B dei{" "}
                 <span className="text-brand-green">Dispositivi Medici</span>
               </h1>
+
               <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-lg">
                 Noleggia dispositivi professionali da medici e cliniche.
-              </p>  
-              <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-lg">  
+              </p>
+
+              <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-lg">
                 Nessun leasing.
               </p>
-              <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-lg">  
+
+              <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-lg">
                 Nessun contratto a lungo termine.
               </p>
             </div>
@@ -44,21 +50,26 @@ export default function HeroSection() {
               <button className="px-8 py-3 bg-brand-green text-white font-semibold rounded-full hover:shadow-soft-lg transition-shadow">
                 Tutti i dispositivi
               </button>
+
               <button className="px-8 py-3 border-2 border-brand-green text-brand-green font-semibold rounded-full hover:bg-brand-light transition-colors">
                 Pubblica il tuo dispositivo
               </button>
             </div>
           </div>
 
-          {/* Right Side - Illustration Space */}
-          <div className="hidden lg:block">
-            <div className="bg-gradient-to-br from-brand-green/10 to-brand-green/5 rounded-3xl h-96 flex items-center justify-center border-2 border-brand-green/20">
-              <div className="text-center space-y-4">
-                <div className="text-6xl">🏥</div>
-                <p className="text-gray-500 font-medium">Premium Medical Equipment</p>
-              </div>
+          {/* Right Side - Animated Logo */}
+          <div className="hidden lg:flex items-center justify-start relative overflow-visible">
+
+            {/* BIGGER GLOW */}
+            <div className="absolute w-[750px] h-[750px] rounded-full bg-brand-green/10 blur-[200px]" />
+
+            {/* BIGGER LOGO CONTAINER */}
+            <div className="relative w-[900px] h-[900px] -ml-40">
+              <MedavaHeroLogo />
             </div>
+
           </div>
+
         </div>
       </div>
     </div>

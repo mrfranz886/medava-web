@@ -7,11 +7,16 @@ const paths = [
 ];
 
 const COLORS = [
-  "#3F5F46", // deep sage (primary)
-  "#4F6F56", // muted forest sage
-  "#5F7F66", // balanced mid sage
-  "#2F4A36"  // dark moss green
+  "#3F5F46", 
+  "#6b8f73", 
+  "#D47271", 
+  "#5F7F66", 
+  "#C28C57", 
+  "#6b8672", 
+  "#8A6478"  
 ];
+
+const PARTICLE_COUNT = 45;
 
 export default function MedavaHeroLogo() {
   const pathRef = useRef(null);
@@ -21,29 +26,30 @@ export default function MedavaHeroLogo() {
   const fullPath = useMemo(() => paths.join(" "), []);
 
   useEffect(() => {
+    let animationFrameId;
+
     const start = () => {
       const path = pathRef.current;
       if (!path) return;
 
       let length;
-
       try {
         length = path.getTotalLength();
       } catch {
         return;
       }
 
-      const particles = Array.from({ length: 18 }).map(() => ({
+      const particles = Array.from({ length: PARTICLE_COUNT }).map(() => ({
         t: Math.random(),
-        speed: 0.0014 + Math.random() * 0.0006,
+        // 🐢 EVEN SLOWER PARTICLES (Cut in half again)
+        speed: 0.00015 + Math.random() * 0.00015, 
         phase: Math.random() * Math.PI * 2,
+        orbitFreq: 12 + Math.random() * 8,
         trail: [],
       }));
 
       const animate = () => {
         particles.forEach((p, i) => {
-
-          // ⚡ CLEAN LOOP (no reset ever)
           p.t = (p.t + p.speed) % 1;
 
           const base = path.getPointAtLength(p.t * length);
@@ -56,18 +62,25 @@ export default function MedavaHeroLogo() {
           const nx = -dy / len;
           const ny = dx / len;
 
-          const wave = Math.sin(p.t * 10 + p.phase) * 0.6;
+          const orbitAngle = p.t * Math.PI * 2 * p.orbitFreq + p.phase;
+          const planarOffset = Math.cos(orbitAngle) * 0.65; 
+          const zDepth = Math.sin(orbitAngle); 
 
-          const x = base.x + nx * wave;
-          const y = base.y + ny * wave;
+          const x = base.x + nx * planarOffset;
+          const y = base.y + ny * planarOffset;
 
           const particle = particleRefs.current[i];
           if (particle) {
             particle.setAttribute("cx", x);
             particle.setAttribute("cy", y);
+            
+            const dynamicRadius = 0.15 + zDepth * 0.08; 
+            const dynamicOpacity = 0.5 + zDepth * 0.4;
+            
+            particle.setAttribute("r", Math.max(0.01, dynamicRadius));
+            particle.setAttribute("opacity", dynamicOpacity);
           }
 
-          // 🌊 SEAMLESS TRAIL FIX (bridge wrap jumps)
           const prev = p.trail[p.trail.length - 1];
 
           if (prev) {
@@ -75,10 +88,8 @@ export default function MedavaHeroLogo() {
             const dy2 = y - prev[1];
             const dist = Math.sqrt(dx2 * dx2 + dy2 * dy2);
 
-            // if a wrap jump is detected → interpolate bridge
             if (dist > 10) {
               const steps = 5;
-
               for (let j = 1; j < steps; j++) {
                 p.trail.push([
                   prev[0] + (dx2 * j) / steps,
@@ -88,10 +99,9 @@ export default function MedavaHeroLogo() {
             }
           }
 
-          // push current point
           p.trail.push([x, y]);
 
-          if (p.trail.length > 260) {
+          if (p.trail.length > 140) {
             p.trail.shift();
           }
 
@@ -107,58 +117,75 @@ export default function MedavaHeroLogo() {
           }
         });
 
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       };
 
       animate();
     };
 
-    requestAnimationFrame(start);
+    animationFrameId = requestAnimationFrame(start);
+    return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
   return (
     <div className="relative w-full h-full flex items-center justify-center">
+      
+      {/* 🌀 ULTRA-SLOW ROTATION STYLES */}
+      <style>{`
+        @keyframes ultra-slow-spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
 
       <svg
-        viewBox="-6 -8 62 76"
+        viewBox="-10 -12 70 80"
         className="w-full h-full block"
-        style={{ overflow: "visible" }}
+        // Applying the spin animation directly to the SVG (120s = 2 minutes per full rotation)
+        style={{ 
+          overflow: "visible",
+          animation: "ultra-slow-spin 120s linear infinite" 
+        }}
         fill="none"
       >
+        <defs>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="0.8" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
 
-        {/* base path */}
         <path
           ref={pathRef}
           d={fullPath}
           stroke="#8BCB7D"
-          strokeWidth="2"
-          opacity="0.08"
+          strokeWidth="0.8"
+          opacity="0.25"
           fill="none"
         />
 
-        {/* trails */}
-        {Array.from({ length: 18 }).map((_, i) => (
+        {Array.from({ length: PARTICLE_COUNT }).map((_, i) => (
           <path
             key={`trail-${i}`}
             ref={(el) => (trailRefs.current[i] = el)}
             stroke={COLORS[i % COLORS.length]}
-            strokeWidth="1.2"
-            opacity="0.18"
+            strokeWidth="0.35" 
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.3"
             fill="none"
+            filter="url(#glow)"
           />
         ))}
 
-        {/* particles */}
-        {Array.from({ length: 18 }).map((_, i) => (
+        {Array.from({ length: PARTICLE_COUNT }).map((_, i) => (
           <circle
             key={`particle-${i}`}
             ref={(el) => (particleRefs.current[i] = el)}
-            r="0.28"
             fill={COLORS[i % COLORS.length]}
-            opacity="0.1"
+            filter="url(#glow)"
           />
         ))}
-
       </svg>
     </div>
   );
